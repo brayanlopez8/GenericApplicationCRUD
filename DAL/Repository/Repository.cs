@@ -52,53 +52,33 @@ namespace DAL.Repository
 
         public T AddOrUpdate(T entity)
         {
-            T obj = entity;
-            var entry = context.Entry(entity);
-            switch (entry.State)
+            if (context.Set<T>().Any(e => e.Id == entity.Id))
             {
-                case EntityState.Detached:
-                    obj = add(entity);
-                    break;
-                case EntityState.Modified:
-                    obj = Update(entity);
-                    break;
-                case EntityState.Added:
-                    obj = add(entity);
-                    break;
-                case EntityState.Unchanged:
-                    //item already in db no need to do anything  
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException();
-
+                context.Entry(entity).State = EntityState.Modified;
             }
-            return obj;
+            else
+            {
+                context.Entry(entity).State = EntityState.Added;
+            }
+
+            context.SaveChanges();
+
+            return entity;
         }
 
         public async Task<T> AddOrUpdateAsync(T entity)
         {
-            T obj = entity;
-            var entry = context.Entry(entity);
-            switch (entry.State)
+            if (context.Set<T>().Any(e => e.Id == entity.Id))
             {
-                case EntityState.Detached:
-                    obj = await addAsyc(entity);
-                    break;
-                case EntityState.Modified:
-                    obj = await UpdateAsync(entity);
-                    break;
-                case EntityState.Added:
-                    obj = await addAsyc(entity);
-                    break;
-                case EntityState.Unchanged:
-                    //item already in db no need to do anything  
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException();
-
+                context.Entry(entity).State = EntityState.Modified;
             }
+            else
+            {
+                context.Entry(entity).State = EntityState.Added;
+            }
+
+            await context.SaveChangesAsync();
+
             return entity;
         }
 

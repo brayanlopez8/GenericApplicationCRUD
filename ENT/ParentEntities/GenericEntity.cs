@@ -15,6 +15,6 @@ namespace ENT.ParentEntities
         public int Id { get; set; }
 
         [Column(TypeName = "datetime2")]
-        public DateTime? DateCreated { get { return DateTime.Now; } }
+        public DateTime DateCreated { get { return DateTime.Now; } }
     }
 }

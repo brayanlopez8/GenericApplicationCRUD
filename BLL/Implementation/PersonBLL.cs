@@ -61,12 +61,15 @@ namespace BLL.Implementation
 
         public PersonVM Put(PersonVM person)
         {
-            throw new NotImplementedException();
+            var newPersonVM = iMapper.Map<PersonVM,Person>(person);
+            return iMapper.Map<Person,PersonVM>(unitOfWork.PersonRepository.AddOrUpdate(newPersonVM));
         }
 
-        Task<PersonVM> IPersonBLL.PutAsync(PersonVM person)
+        public async Task<PersonVM> PutAsync(PersonVM person)
         {
-            throw new NotImplementedException();
+            var newPersonVM = iMapper.Map<PersonVM, Person>(person);
+            var newPerson = await unitOfWork.PersonRepository.AddOrUpdateAsync(newPersonVM);
+            return iMapper.Map<Person, PersonVM>(newPerson);
         }
     }
 }

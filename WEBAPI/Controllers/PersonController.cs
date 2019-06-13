@@ -10,48 +10,121 @@ using ViewModel.ViewModel;
 
 namespace WEBAPI.Controllers
 {
+    /// <summary>
+    /// PersonController class
+    /// </summary>
     public class PersonController : ApiController
     {
         private IPersonBLL _personBLL;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="personBLL"></param>
         public PersonController(IPersonBLL personBLL)
         {
             this._personBLL = personBLL;
         }
 
-        // GET: api/Person
-        public IEnumerable<PersonVM> Get()
+        /// <summary>
+        /// GET: api/Person
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public IHttpActionResult Get()
         {
-            return _personBLL.GetList();
+            try
+            {
+                return Ok<IEnumerable<PersonVM>>(_personBLL.GetList());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
         }
 
-        //GET: api/PersonAsyc
+        /// <summary>
+        /// GET: api/PersonAsyc
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
         [Route("api/GetAllAsync")]
-        public async Task<IEnumerable<PersonVM>> GetAsync()
+        public async Task<IHttpActionResult> GetAsync()
         {
-            return await _personBLL.GetListAsync();
+            try
+            {
+                var x = await _personBLL.GetListAsync();
+                return Ok<List<PersonVM>>(x);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+
         }
 
-        // GET: api/Person/5
-        public PersonVM Get(int id)
+        /// <summary>
+        /// GET: api/Person/5
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public IHttpActionResult Get(int id)
         {
-            return _personBLL.GetById(id);
+            try
+            {
+                return Ok<PersonVM>(_personBLL.GetById(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
         }
 
-        // GET: api/PersonAsync/5
+        /// <summary>
+        /// GET: api/PersonAsync/5
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
         [Route("api/GetAsync")]
-        public async Task<PersonVM> GetAsync(int id)
+        public async Task<IHttpActionResult> GetAsync(int id)
         {
-            return await _personBLL.GetByIdAsync(id);
+            try
+            {
+                var x = await _personBLL.GetByIdAsync(id);
+                return Ok<PersonVM>(x);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
         }
 
-        // POST: api/Person
-        public void Post(PersonVM value)
+        /// <summary>
+        /// POST: api/Person
+        /// </summary>
+        /// <param name="value"></param>
+        [HttpPost]
+        public IHttpActionResult Post(PersonVM value)
         {
-            _personBLL.Create(value);
+            try
+            {
+                return Ok<PersonVM>(_personBLL.Create(value));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
         }
-        
-        // POST: api/PersonAsync
-        [Route("api/PostAsyc")]        
+
+        /// <summary>
+        /// POST: api/PersonAsync
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("api/PostAsyc")]
         public async Task<IHttpActionResult> PostAsyc(PersonVM value)
         {
             try
@@ -65,18 +138,53 @@ namespace WEBAPI.Controllers
             }
         }
 
-        // PUT: api/Person/5
-        public IHttpActionResult Put(int id, PersonVM value)
+        /// <summary>
+        /// PUT: api/Person/5
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [HttpPut]
+        public IHttpActionResult Put(PersonVM value)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest("Not a valid model");
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Not a valid model");
+                }
+                var x = _personBLL.Put(value);
+
+                return Ok<PersonVM>(x);
             }
-            _personBLL.PutAsync(value);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
 
-            return Ok<PersonVM>(new PersonVM());
+        /// <summary>
+        /// PUT: api/Person/5
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("api/PutAsyc")]
+        public async Task<IHttpActionResult> PutAsync(PersonVM value)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Not a valid model");
+                }
+                var x = await _personBLL.PutAsync(value);
 
-
+                return Ok<PersonVM>(x);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
         }
 
         // DELETE: api/Person/5
