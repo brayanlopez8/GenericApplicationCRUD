@@ -15,7 +15,7 @@ namespace DAL.UnitOfWork
         private Repository<Person> personRepository;
         private Repository<Country> contryRepository;
 
-        public Repository<Country> ContryRepository
+        public Repository<Country> CountryRepository
         {
             get
             {

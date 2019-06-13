@@ -29,17 +29,12 @@ namespace BLL.Implementation
         public CountryVM Create(CountryVM Entity)
         {
             var entity = iMapper.Map<CountryVM, Country>(Entity);
-            var Result = iMapper.Map<Country, CountryVM>(unitOfWork.ContryRepository.add(entity));
+            var Result = iMapper.Map<Country, CountryVM>(unitOfWork.CountryRepository.add(entity));
             if (Result != null)
             {
                 CacheManager<List<CountryVM>>.RemoveItemFromCache(NameCache);
             }
             return Result;
-        }
-
-        public Task<CountryVM> CreateAsync(CountryVM Entity)
-        {
-            throw new NotImplementedException();
         }
 
         public CountryVM GetById(int id)
@@ -52,15 +47,41 @@ namespace BLL.Implementation
             List<CountryVM> result = CacheManager<List<CountryVM>>.TryGetFromCache(NameCache);
             if (result == null)
             {
-                result = iMapper.Map<List<Country>, List<CountryVM>>(unitOfWork.ContryRepository.Getall().ToList());
+                result = iMapper.Map<List<Country>, List<CountryVM>>(unitOfWork.CountryRepository.Getall().ToList());
                 CacheManager<List<CountryVM>>.TryAddToCacheDefaultTime(NameCache, result);
             }
             return result;
         }
 
-        public Task PutAsync(CountryVM Entity)
+        public CountryVM Put(CountryVM country)
         {
-            throw new NotImplementedException();
+            var newCountryVM = iMapper.Map<CountryVM, Country>(country);
+            return iMapper.Map<Country, CountryVM>(unitOfWork.CountryRepository.AddOrUpdate(newCountryVM));
         }
+
+        public async Task<CountryVM> GetByIdAsync(int id)
+        {
+            return iMapper.Map<Country, CountryVM>(await unitOfWork.CountryRepository.FindFirstWhereAsync(c => c.Id == id));
+        }
+
+        public async Task<CountryVM> CreateAsync(CountryVM Country)
+        {
+            var newCountry = iMapper.Map<CountryVM, Country>(Country);
+            return iMapper.Map<Country, CountryVM>(await unitOfWork.CountryRepository.addAsyc(newCountry));
+        }
+
+        public async Task<List<CountryVM>> GetListAsync()
+        {
+            var x = await unitOfWork.CountryRepository.GetallAsyc();
+            return iMapper.Map<List<Country>, List<CountryVM>>(x.ToList());
+        }
+
+        public async Task<CountryVM> PutAsync(CountryVM Country)
+        {
+            var newCountryVM = iMapper.Map<CountryVM, Country>(Country);
+            var newCountry = await unitOfWork.CountryRepository.AddOrUpdateAsync(newCountryVM);
+            return iMapper.Map<Country, CountryVM>(newCountry);
+        }
+
     }
 }

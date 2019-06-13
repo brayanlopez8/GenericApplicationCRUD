@@ -4,44 +4,197 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using ViewModel.ViewModel;
 
 namespace WEBAPI.Controllers
 {
+    /// <summary>
+    /// CountryController class
+    /// </summary>
+    [Route("api/Country")]    
     public class CountryController : ApiController
     {
         private ICountryBLL _CountryBLL;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="CountryBLL"></param>
         public CountryController(ICountryBLL CountryBLL)
         {
             this._CountryBLL = CountryBLL;
         }
-        // GET: api/Country
-        public IEnumerable<CountryVM> Get()
+
+        /// <summary>
+        /// GET: api/GetAllCountry
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetAllCountries")]
+        public IEnumerable<CountryVM> GetAll()
         {
             return _CountryBLL.GetList();
         }
 
-        // GET: api/Country/5
+        /// <summary>
+        /// GET: api/GetCountry/5
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetCountry")]
         public CountryVM Get(int id)
         {
             return _CountryBLL.GetById(id);
         }
 
-        // POST: api/Country
+        /// <summary>
+        /// POST: api/PostCountry
+        /// </summary>
+        /// <param name="value"></param>
+        [HttpPost]
+        [Route("PostCountry")]
         public void Post(CountryVM value)
         {
             _CountryBLL.Create(value);
         }
 
-        // PUT: api/Country/5
-        public void Put(int id, [FromBody]string value)
+        /// <summary>
+        /// PUT: api/PutCountry/5
+        /// </summary>        
+        /// <param name="value"></param>
+        [HttpPut]
+        [Route("PutCountry")]
+        public IHttpActionResult Put(CountryVM value)
         {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Not a valid model");
+                }
+                var x = _CountryBLL.Put(value);
+
+                return Ok<CountryVM>(x);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
         }
 
-        //DELETE: api/Country/5
-        public void Delete(int id)
+        ///// <summary>
+        ///// DELETE: api/Country/5
+        ///// </summary>
+        ///// <param name="id"></param>
+        //[HttpDelete]
+        //public void Delete(int id)
+        //{
+        //}
+
+        #region Metoths Async
+
+        /// <summary>
+        /// GET: api/GetAllAsyncCountries
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetAllAsyncCountries")]
+        public async Task<IHttpActionResult> GetAllAsync()
         {
+            try
+            {
+                var x = await _CountryBLL.GetListAsync();
+                return Ok<List<CountryVM>>(x);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
         }
+
+        /// <summary>
+        /// GET: api/GetAsyncCountry/5
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetAsyncCountry")]
+        public async Task<IHttpActionResult> GetAsync(int id)
+        {
+            try
+            {
+                var x = await _CountryBLL.GetByIdAsync(id);
+                return Ok<CountryVM>(x);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// POST: api/PostAsyncCountry
+        /// </summary>
+        /// <param name="value"></param>
+        [HttpPost]
+        [Route("PostAsyncCountry")]
+        public async Task<IHttpActionResult> PostAsync(CountryVM value)
+        {
+            try
+            {
+                var x = await _CountryBLL.CreateAsync(value);
+                return Ok<CountryVM>(x);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            };
+        }
+
+        /// <summary>
+        /// PUT: api/PutAsyncCountry/5
+        /// </summary>        
+        /// <param name="value"></param>
+        [HttpPut]
+        [Route("PutAsyncCountry")]
+        public async Task<IHttpActionResult> PutAsync(CountryVM value)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Not a valid model");
+                }
+                var x = await _CountryBLL.PutAsync(value);
+
+                return Ok<CountryVM>(x);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
+
+        ///// <summary>
+        ///// DELETE: api/Country/5
+        ///// </summary>
+        ///// <param name="id"></param>
+        //[HttpDelete]
+        //[Route("DeleteAsync")]
+        //public IHttpActionResult DeleteAsync(int id)
+        //{
+        //    try
+        //    {
+        //        var x = await _CountryBLL.DeleteAsyn(id);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.ToString());
+        //    }
+        //}
+        #endregion
     }
 }

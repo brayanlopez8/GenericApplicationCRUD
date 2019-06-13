@@ -13,6 +13,7 @@ namespace WEBAPI.Controllers
     /// <summary>
     /// PersonController class
     /// </summary>
+    [Route("api/Person")]  
     public class PersonController : ApiController
     {
         private IPersonBLL _personBLL;
@@ -27,11 +28,12 @@ namespace WEBAPI.Controllers
         }
 
         /// <summary>
-        /// GET: api/Person
+        /// GET: api/GetPerson
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public IHttpActionResult Get()
+        [Route("GetAllPersons")]
+        public IHttpActionResult GetAll()
         {
             try
             {
@@ -44,11 +46,11 @@ namespace WEBAPI.Controllers
         }
 
         /// <summary>
-        /// GET: api/PersonAsyc
+        /// GET: api/GetAllAsyncPersons
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route("api/GetAllAsync")]
+        [Route("GetAllAsyncPersons")]
         public async Task<IHttpActionResult> GetAsync()
         {
             try
@@ -64,11 +66,12 @@ namespace WEBAPI.Controllers
         }
 
         /// <summary>
-        /// GET: api/Person/5
+        /// GET: api/GetPerson/5
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
+        [Route("GetPerson")]
         public IHttpActionResult Get(int id)
         {
             try
@@ -82,12 +85,12 @@ namespace WEBAPI.Controllers
         }
 
         /// <summary>
-        /// GET: api/PersonAsync/5
+        /// GET: api/GetAsyncPerson/5
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("api/GetAsync")]
+        [Route("GetAsyncPerson")]
         public async Task<IHttpActionResult> GetAsync(int id)
         {
             try
@@ -102,10 +105,11 @@ namespace WEBAPI.Controllers
         }
 
         /// <summary>
-        /// POST: api/Person
+        /// POST: api/PostPerson
         /// </summary>
         /// <param name="value"></param>
         [HttpPost]
+        [Route("PostPerson")]
         public IHttpActionResult Post(PersonVM value)
         {
             try
@@ -119,13 +123,13 @@ namespace WEBAPI.Controllers
         }
 
         /// <summary>
-        /// POST: api/PersonAsync
+        /// POST: api/PostAsyncPerson
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("api/PostAsyc")]
-        public async Task<IHttpActionResult> PostAsyc(PersonVM value)
+        [Route("PostAsyncPerson")]
+        public async Task<IHttpActionResult> PostAsync(PersonVM value)
         {
             try
             {
@@ -139,11 +143,12 @@ namespace WEBAPI.Controllers
         }
 
         /// <summary>
-        /// PUT: api/Person/5
+        /// PUT: api/PutPerson/5
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
         [HttpPut]
+        [Route("PutPerson")]
         public IHttpActionResult Put(PersonVM value)
         {
             try
@@ -163,12 +168,12 @@ namespace WEBAPI.Controllers
         }
 
         /// <summary>
-        /// PUT: api/Person/5
+        /// PUT: api/PutAsyncPerson/5
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
         [HttpPut]
-        [Route("api/PutAsyc")]
+        [Route("PutAsyncPerson")]
         public async Task<IHttpActionResult> PutAsync(PersonVM value)
         {
             try
