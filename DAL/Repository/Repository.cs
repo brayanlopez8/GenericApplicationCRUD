@@ -20,33 +20,50 @@ namespace DAL.Repository
             this.dbSet = context.Set<T>();
 
         }
-        public void Update(T entidad)
+        public T Update(T entity)
         {
-            dbSet.Attach(entidad);
-            context.Entry(entidad).State = EntityState.Modified;
+            dbSet.Attach(entity);
+            context.Entry(entity).State = EntityState.Modified;
             context.SaveChanges();
+            return entity;
         }
 
-        public T add(T entidad)
+        public async Task<T> UpdateAsync(T entity)
         {
-            context.Entry(entidad).State = EntityState.Added;
-            context.SaveChanges();
-            return entidad;
+            dbSet.Attach(entity);
+            context.Entry(entity).State = EntityState.Modified;
+            int x = await context.SaveChangesAsync();
+            return entity;
         }
 
-        public T AddOrUpdate(T entidad)
+        public T add(T entity)
         {
-            var entry = context.Entry(entidad);
+            context.Entry(entity).State = EntityState.Added;
+            context.SaveChanges();
+            return entity;
+        }
+
+        public async Task<T> addAsyc(T entity)
+        {
+            context.Entry(entity).State = EntityState.Added;
+            var x = await context.SaveChangesAsync();
+            return entity;
+        }
+
+        public T AddOrUpdate(T entity)
+        {
+            T obj = entity;
+            var entry = context.Entry(entity);
             switch (entry.State)
             {
                 case EntityState.Detached:
-                    add(entidad);
+                    obj = add(entity);
                     break;
                 case EntityState.Modified:
-                    Update(entidad);
+                    obj = Update(entity);
                     break;
                 case EntityState.Added:
-                    add(entidad);
+                    obj = add(entity);
                     break;
                 case EntityState.Unchanged:
                     //item already in db no need to do anything  
@@ -56,7 +73,33 @@ namespace DAL.Repository
                     throw new ArgumentOutOfRangeException();
 
             }
-            return entidad;
+            return obj;
+        }
+
+        public async Task<T> AddOrUpdateAsync(T entity)
+        {
+            T obj = entity;
+            var entry = context.Entry(entity);
+            switch (entry.State)
+            {
+                case EntityState.Detached:
+                    obj = await addAsyc(entity);
+                    break;
+                case EntityState.Modified:
+                    obj = await UpdateAsync(entity);
+                    break;
+                case EntityState.Added:
+                    obj = await addAsyc(entity);
+                    break;
+                case EntityState.Unchanged:
+                    //item already in db no need to do anything  
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+
+            }
+            return entity;
         }
 
         public void Delete(int id)
@@ -66,9 +109,21 @@ namespace DAL.Repository
             {
                 dbSet.Remove(existing);
             }
-            //var entidad = new T() { Id = id };
-            //context.Entry(entidad).State = EntityState.Deleted;
+            //var entity = new T() { Id = id };
+            //context.Entry(entity).State = EntityState.Deleted;
             context.SaveChanges();
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            T existing = dbSet.Find(id);
+            if (existing != null)
+            {
+                dbSet.Remove(existing);
+            }
+            //var entity = new T() { Id = id };
+            //context.Entry(entity).State = EntityState.Deleted;
+            var x = await context.SaveChangesAsync();
         }
 
         public IEnumerable<T> FindBy(QueryParameter<T> queryParameter)
@@ -90,14 +145,25 @@ namespace DAL.Repository
             }
         }
 
+
         public IEnumerable<T> FindWhere(Expression<Func<T, bool>> LamdaExpression)
         {
             return context.Set<T>().Where(LamdaExpression).ToList();
         }
 
+        public async Task<IEnumerable<T>> FindWhereAsync(Expression<Func<T, bool>> LamdaExpression)
+        {
+            return await context.Set<T>().Where(LamdaExpression).ToListAsync<T>();
+        }
+
         public T FindFirstWhere(Expression<Func<T, bool>> LamdaExpression)
         {
             return context.Set<T>().Where(LamdaExpression).FirstOrDefault();
+        }
+
+        public async Task<T> FindFirstWhereAsync(Expression<Func<T, bool>> LamdaExpression)
+        {
+            return await context.Set<T>().Where(LamdaExpression).FirstOrDefaultAsync<T>();
         }
 
         private OrderByClass GetOrderBy(QueryParameter<T> queryParameter)
@@ -117,14 +183,29 @@ namespace DAL.Repository
             return context.Set<T>().FirstOrDefault(x => x.Id == id);
         }
 
+        public async Task<T> FindByIdAsync(int id)
+        {
+            return await context.Set<T>().FirstOrDefaultAsync<T>(x => x.Id == id);
+        }
+
         public int Count(Expression<Func<T, bool>> where)
         {
             return context.Set<T>().Where(where).Count();
         }
 
+        public async Task<int> CountAsync(Expression<Func<T, bool>> where)
+        {
+            return await context.Set<T>().Where(where).CountAsync<T>();
+        }
+
         public IEnumerable<T> Getall()
         {
             return dbSet.ToList();
+        }
+
+        public async Task<IEnumerable<T>> GetallAsyc()
+        {
+            return await dbSet.ToListAsync<T>();
         }
 
         public void InsertBulk(IEnumerable<T> entities, string parentTableName)
@@ -136,7 +217,7 @@ namespace DAL.Repository
         public void InsertBulk(IEnumerable<T> entities, string parentTableName, int batchSize)
         {
             BulkOperation.Operation bulkOperation = new BulkOperation.Operation(context.Database);
-            bulkOperation.BulkInsert(entities, parentTableName,batchSize);
+            bulkOperation.BulkInsert(entities, parentTableName, batchSize);
         }
 
         public void DeleteBulk(IEnumerable<T> entities, string tableName)

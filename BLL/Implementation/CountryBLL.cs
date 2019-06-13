@@ -17,20 +17,27 @@ namespace BLL.Implementation
     {
         private IMapper iMapper = null;
         private UnitOfWork unitOfWork;
+        private string NameCache = string.Empty;
         public CountryBLL()
         {
             var config = BLL.Automapper.AutoMapperConfig.ConfigurationAutomapper();
             iMapper = config.CreateMapper();
             this.unitOfWork = new UnitOfWork();
+            this.NameCache = this.GetType().Name;
         }
 
         public CountryVM Create(CountryVM Entity)
         {
             var entity = iMapper.Map<CountryVM, Country>(Entity);
-            return iMapper.Map<Country, CountryVM>(unitOfWork.ContryRepository.add(entity));
+            var Result = iMapper.Map<Country, CountryVM>(unitOfWork.ContryRepository.add(entity));
+            if (Result != null)
+            {
+                CacheManager<List<CountryVM>>.RemoveItemFromCache(NameCache);
+            }
+            return Result;
         }
 
-        public Task<PersonVM> CreateAsync(CountryVM Entity)
+        public Task<CountryVM> CreateAsync(CountryVM Entity)
         {
             throw new NotImplementedException();
         }
@@ -42,12 +49,11 @@ namespace BLL.Implementation
 
         public List<CountryVM> GetList()
         {
-            string NameChache = $"{new StackFrame(1).GetMethod().ReflectedType.FullName}{new StackFrame(1).GetMethod().Name}";
-            List<CountryVM> result = CacheManager<List<CountryVM>>.TryGetFromCache(NameChache);
+            List<CountryVM> result = CacheManager<List<CountryVM>>.TryGetFromCache(NameCache);
             if (result == null)
             {
                 result = iMapper.Map<List<Country>, List<CountryVM>>(unitOfWork.ContryRepository.Getall().ToList());
-                CacheManager<List<CountryVM>>.TryAddToCacheDefaultTime(NameChache, result);
+                CacheManager<List<CountryVM>>.TryAddToCacheDefaultTime(NameCache, result);
             }
             return result;
         }

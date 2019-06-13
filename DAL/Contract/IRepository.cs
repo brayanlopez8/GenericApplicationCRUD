@@ -9,17 +9,41 @@ namespace DAL.Contract
 {
     public interface IRepository<T>
     {
-        T add(T entidad);
+        T add(T entity);
+
+        Task<T> addAsyc(T entity);
+
         void Delete(int id);
-        void Update(T entidad);
+
+        Task DeleteAsync(int id);
+
+        T Update(T entity);
+
+        Task<T> UpdateAsync(T entity);
+
         int Count(Expression<Func<T, bool>> where);
+
+        Task<int> CountAsync(Expression<Func<T, bool>> where);
+
         T FindById(int id);
-        IEnumerable<T> FindBy(QueryParameter<T> parametrosDeQuery);
+
+        Task<T> FindByIdAsync(int id);
+
+        IEnumerable<T> FindBy(QueryParameter<T> QueryParameter);
+
         IEnumerable<T> FindWhere(Expression<Func<T, bool>> LamdaExpression);
+
+        Task<IEnumerable<T>> FindWhereAsync(Expression<Func<T, bool>> LamdaExpression);
+
         IEnumerable<T> Getall();
+
+        Task<IEnumerable<T>> GetallAsyc();
+
         T FindFirstWhere(Expression<Func<T, bool>> LamdaExpression);
 
-        T AddOrUpdate(T entidad);
+        Task<T> FindFirstWhereAsync(Expression<Func<T, bool>> LamdaExpression);
+
+        T AddOrUpdate(T entity);
 
         void InsertBulk(IEnumerable<T> entities, string parentTableName);
 

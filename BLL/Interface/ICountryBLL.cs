@@ -12,7 +12,7 @@ namespace BLL.Interface
         List<CountryVM> GetList();
         CountryVM GetById(int id);
         CountryVM Create(CountryVM Entity);
-        Task<PersonVM> CreateAsync(CountryVM Entity);
+        Task<CountryVM> CreateAsync(CountryVM Entity);
         Task PutAsync(CountryVM Entity);
     }
 }

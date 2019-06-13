@@ -8,7 +8,7 @@ namespace DAL.Migrations
         public override void Up()
         {
             CreateTable(
-                "dbo.People",
+                "dbo.Person",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -17,7 +17,7 @@ namespace DAL.Migrations
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
-                "dbo.Countries",
+                "dbo.Country",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -33,8 +33,8 @@ namespace DAL.Migrations
         
         public override void Down()
         {
-            DropTable("dbo.Countries");
-            DropTable("dbo.People");
+            DropTable("dbo.Country");
+            DropTable("dbo.Person");
         }
     }
 }

@@ -30,14 +30,20 @@ namespace BLL.Implementation
             return iMapper.Map<Person, PersonVM>(unitOfWork.PersonRepository.add(newPerson));
         }
 
-        public Task<PersonVM> CreateAsync(PersonVM person)
+        public async Task<PersonVM> CreateAsync(PersonVM person)
         {
-            throw new NotImplementedException();
+            var newPerson = iMapper.Map<PersonVM, Person>(person);
+            return iMapper.Map<Person, PersonVM>(await unitOfWork.PersonRepository.addAsyc(newPerson));
         }
 
         public PersonVM GetById(int id)
         {
             return iMapper.Map<Person, PersonVM>(unitOfWork.PersonRepository.FindById(id));
+        }
+
+        public async Task<PersonVM> GetByIdAsync(int id)
+        {
+            return iMapper.Map<Person, PersonVM>(await unitOfWork.PersonRepository.FindFirstWhereAsync(c => c.Id == id));
         }
 
         public List<PersonVM> GetList()
@@ -47,7 +53,18 @@ namespace BLL.Implementation
 
         }
 
-        public Task PutAsync(PersonVM person)
+        public async Task<List<PersonVM>> GetListAsync()
+        {
+            var x = await unitOfWork.PersonRepository.GetallAsyc();
+            return iMapper.Map<List<Person>, List<PersonVM>>(x.ToList());
+        }
+
+        public PersonVM Put(PersonVM person)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<PersonVM> IPersonBLL.PutAsync(PersonVM person)
         {
             throw new NotImplementedException();
         }

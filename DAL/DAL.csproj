@@ -51,9 +51,9 @@
     <Compile Include="BulkOperation\BulkOperation.cs" />
     <Compile Include="BulkOperation\ChildAttribute.cs" />
     <Compile Include="Contract\IRepository.cs" />
-    <Compile Include="Migrations\201906131338331_InitialMigration.cs" />
-    <Compile Include="Migrations\201906131338331_InitialMigration.Designer.cs">
-      <DependentUpon>201906131338331_InitialMigration.cs</DependentUpon>
+    <Compile Include="Migrations\201906131500376_InitialMigration.cs" />
+    <Compile Include="Migrations\201906131500376_InitialMigration.Designer.cs">
+      <DependentUpon>201906131500376_InitialMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MyDBContext\MyDBContext.cs" />
@@ -73,8 +73,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201906131338331_InitialMigration.resx">
-      <DependentUpon>201906131338331_InitialMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201906131500376_InitialMigration.resx">
+      <DependentUpon>201906131500376_InitialMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
