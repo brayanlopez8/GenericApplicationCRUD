@@ -49,12 +49,20 @@ namespace WEBAPI.Controllers
         {
             _personBLL.Create(value);
         }
-        // POST: api/PersonAsync
-        [Route("api/PostAsyc")]
         
-        public async Task PostAsyc(PersonVM value)
+        // POST: api/PersonAsync
+        [Route("api/PostAsyc")]        
+        public async Task<IHttpActionResult> PostAsyc(PersonVM value)
         {
-            var x = await _personBLL.CreateAsync(value);
+            try
+            {
+                var x = await _personBLL.CreateAsync(value);
+                return Ok<PersonVM>(x);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
         }
 
         // PUT: api/Person/5
