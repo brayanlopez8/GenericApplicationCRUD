@@ -13,7 +13,6 @@ namespace WEBAPI.Controllers
     /// <summary>
     /// CountryController class
     /// </summary>
-    [Route("api/Country")]    
     public class CountryController : ApiController
     {
         private ICountryBLL _CountryBLL;
@@ -32,7 +31,7 @@ namespace WEBAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route("GetAllCountries")]
+        [Route("api/countries")]
         public IEnumerable<CountryVM> GetAll()
         {
             return _CountryBLL.GetList();
@@ -44,7 +43,7 @@ namespace WEBAPI.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("GetCountry")]
+        [Route("api/countries/{id}")]
         public CountryVM Get(int id)
         {
             return _CountryBLL.GetById(id);
@@ -55,7 +54,7 @@ namespace WEBAPI.Controllers
         /// </summary>
         /// <param name="value"></param>
         [HttpPost]
-        [Route("PostCountry")]
+        [Route("api/countries")]
         public void Post(CountryVM value)
         {
             _CountryBLL.Create(value);
@@ -66,7 +65,7 @@ namespace WEBAPI.Controllers
         /// </summary>        
         /// <param name="value"></param>
         [HttpPut]
-        [Route("PutCountry")]
+        [Route("api/contries")]
         public IHttpActionResult Put(CountryVM value)
         {
             try
@@ -101,7 +100,7 @@ namespace WEBAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route("GetAllAsyncCountries")]
+        [Route("api/countriesAsync")]
         public async Task<IHttpActionResult> GetAllAsync()
         {
             try
@@ -121,7 +120,7 @@ namespace WEBAPI.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("GetAsyncCountry")]
+        [Route("api/countriesAsync/{id}")]
         public async Task<IHttpActionResult> GetAsync(int id)
         {
             try
@@ -140,7 +139,7 @@ namespace WEBAPI.Controllers
         /// </summary>
         /// <param name="value"></param>
         [HttpPost]
-        [Route("PostAsyncCountry")]
+        [Route("api/countriesAsync")]
         public async Task<IHttpActionResult> PostAsync(CountryVM value)
         {
             try
@@ -159,7 +158,7 @@ namespace WEBAPI.Controllers
         /// </summary>        
         /// <param name="value"></param>
         [HttpPut]
-        [Route("PutAsyncCountry")]
+        [Route("api/countriesAsync")]
         public async Task<IHttpActionResult> PutAsync(CountryVM value)
         {
             try
