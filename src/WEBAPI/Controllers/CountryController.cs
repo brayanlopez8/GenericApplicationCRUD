@@ -65,7 +65,7 @@ namespace WEBAPI.Controllers
         /// </summary>        
         /// <param name="value"></param>
         [HttpPut]
-        [Route("api/contries")]
+        [Route("api/countries")]
         public IHttpActionResult Put(CountryVM value)
         {
             try
