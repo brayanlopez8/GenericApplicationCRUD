@@ -21,6 +21,9 @@ namespace BLL.Automapper
                 cfg.CreateMap<Country, CountryVM>();
                 cfg.CreateMap<CountryVM, Country>();
 
+                cfg.CreateMap<City, CityVM>();
+                cfg.CreateMap<CityVM, City>();
+
             });
 
             return config;

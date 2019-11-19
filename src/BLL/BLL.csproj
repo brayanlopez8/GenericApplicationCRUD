@@ -45,7 +45,9 @@
   <ItemGroup>
     <Compile Include="Automapper\AutoMapperConfig.cs" />
     <Compile Include="Implementation\CountryBLL.cs" />
+    <Compile Include="Implementation\CityBLL.cs" />
     <Compile Include="Implementation\PersonBLL.cs" />
+    <Compile Include="Interface\ICityBLL.cs" />
     <Compile Include="Interface\ICountryBLL.cs" />
     <Compile Include="Interface\IPersonBLL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

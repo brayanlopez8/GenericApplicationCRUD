@@ -18,6 +18,7 @@ namespace WEBAPI
             // e.g. container.RegisterType<ITestService, TestService>();
             container.RegisterType<IPersonBLL, PersonBLL>();
             container.RegisterType<ICountryBLL, CountryBLL>();
+            container.RegisterType<ICityBLL, CityBLL>();
 
             GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);
         }

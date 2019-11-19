@@ -12,6 +12,7 @@ namespace DAL.UnitOfWork
     {
         private MyDBContext context = new MyDBContext();
         private bool disposed = false;
+        private Repository<City> cityReopository;
         private Repository<Person> personRepository;
         private Repository<Country> contryRepository;
 
@@ -35,6 +36,18 @@ namespace DAL.UnitOfWork
                     this.personRepository = new Repository<Person>(context);
                 }
                 return personRepository;
+            }
+        }
+
+        public Repository<City> CityRepository
+        {
+            get
+            {
+                if (this.cityReopository == null)
+                {
+                    this.cityReopository = new Repository<City>(context);
+                }
+                return cityReopository;
             }
         }
 

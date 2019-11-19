@@ -22,6 +22,7 @@ namespace DAL
 
         public virtual DbSet<Person> Areas { get; set; }
         public virtual DbSet<Country> Contry { get; set; }
+        public virtual DbSet<City> City { get; set; }
 
     }
 }
